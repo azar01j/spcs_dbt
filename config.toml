@@ -1,17 +1,7 @@
 [connections]
-[connections.dummy_1]
-account = "dummy"
-user = "dummy"
-password = "dummy"
-warehouse = "dummy"
-role = "dummy"
-
-
-[connections.dummy_2]
-account = "dummy"
-user = "dummy"
-password = "dummy"
-warehouse = "dummy"
-role = "dummy"
-
-
+[connections.Dummy]
+account = "test"
+user = "test"
+password = "test"
+warehouse = "test"
+role = "test"
