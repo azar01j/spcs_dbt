@@ -76,7 +76,8 @@ jobs:
         SNOWFLAKE_CONNECTIONS_DUMMY_DATABASE: doc_ai_db
         SNOWFLAKE_CONNECTIONS_DUMMY_SCHEMA: doc_ai_schema
       run: |
-        repo_url = $(snow spcs image-repository url dbt_repository --connection Dummy)
+        snow spcs image-repository url dbt_repository --connection Dummy
+        epo_url = $(snow spcs image-repository url dbt_repository --connection Dummy)
         docker tag dbt_app $repo_url/dbt_app:latest
         docker images
         snow spcs image-registry login --connection Dummy
