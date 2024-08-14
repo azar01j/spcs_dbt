@@ -77,11 +77,10 @@ jobs:
         SNOWFLAKE_CONNECTIONS_DUMMY_SCHEMA: doc_ai_schema
       run: |
         snow spcs image-repository url dbt_repository --connection Dummy
-        $repo_url = $(snow spcs image-repository url dbt_repository --connection Dummy)
-        docker tag dbt_app $repo_url/dbt_app:latest
+        docker tag dbt_app hiiwhnq-nc74811.registry.snowflakecomputing.com/doc_ai_db/doc_ai_schema/dbt_repository/dbt_app:latest
         docker images
         snow spcs image-registry login --connection Dummy
-        docker push $repo_url/dbt_app:latest 
+        docker push hiiwhnq-nc74811.registry.snowflakecomputing.com/doc_ai_db/doc_ai_schema/dbt_repository/dbt_app:latest 
         snow spcs service create dbt_service --compute-pool dbt_pool --spec-path container-services-dbt/app/spec.yml --eai-name 'test_DBT_SNOWFLAKE_EGRESS_ACCESSS_INTEGRATION' --if-not-exists --connection Dummy
     
     - name: Sleep for 120 seconds. Allow Service to Start and Create Endpoint
