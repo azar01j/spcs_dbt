@@ -53,5 +53,5 @@ jobs:
         SNOWFLAKE_CONNECTIONS_DUMMY_ROLE: accountadmin
         SNOWFLAKE_CONNECTIONS_DUMMY_WAREHOUSE: Compute_wh
         SNOWFLAKE_CONNECTIONS_DUMMY_DATABASE: doc_ai_db
-      run: snow sql -q "select 42-1 as val;" --connection dummy_2
+      run: snow sql -q "select 42+1 as val;" --connection dummy_2
     
