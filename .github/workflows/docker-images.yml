@@ -64,7 +64,7 @@ jobs:
         SNOWFLAKE_CONNECTIONS_DUMMY_WAREHOUSE: Compute_wh
         SNOWFLAKE_CONNECTIONS_DUMMY_DATABASE: doc_ai_db
         SNOWFLAKE_CONNECTIONS_DUMMY_SCHEMA: doc_ai_schema
-      run: snow sql -q "ALTER TASK LOAD_NEW_FILE_DATA RESUME; ALTER REFRESH_STAGE RESUME;" --connection Dummy
+      run: snow sql -q "ALTER TASK LOAD_NEW_FILE_DATA RESUME; ALTER TASK REFRESH_STAGE RESUME;" --connection Dummy
     
     - name: dbt_repository
       env:
