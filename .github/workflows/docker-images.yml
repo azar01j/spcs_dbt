@@ -66,3 +66,37 @@ jobs:
         SNOWFLAKE_CONNECTIONS_DUMMY_SCHEMA: doc_ai_schema
       run: snow sql -q "ALTER TASK  LOAD_NEW_FILE_DATA RESUME; ALTER TASK REFRESH_STAGE RESUME;" --connection Dummy
     
+    - name: dbt_repository
+      env:
+        SNOWFLAKE_CONNECTIONS_DUMMY_ACCOUNT: ${{secrets.spc_account}}
+        SNOWFLAKE_CONNECTIONS_DUMMY_USER: ${{secrets.spc_USER}}
+        SNOWFLAKE_CONNECTIONS_DUMMY_PASSWORD: ${{secrets.spc_PASSWORD}}
+        SNOWFLAKE_CONNECTIONS_DUMMY_ROLE: accountadmin
+        SNOWFLAKE_CONNECTIONS_DUMMY_WAREHOUSE: Compute_wh_v1
+        SNOWFLAKE_CONNECTIONS_DUMMY_DATABASE: doc_ai_db
+        SNOWFLAKE_CONNECTIONS_DUMMY_SCHEMA: doc_ai_schema
+      run: |
+        repo_url = $(snow spcs image-repository url dbt_repository --connection Dummy)
+        docker tag dbt_app $repo_url/dbt_app:latest
+        docker images
+        snow spcs image-registry login --connection Dummy
+        docker push $repo_url/dbt_app:latest 
+        snow spcs service create dbt_service --compute-pool dbt_pool --spec-path container-services-dbt/app/spec.yml --eai-name 'test_DBT_SNOWFLAKE_EGRESS_ACCESSS_INTEGRATION' --if-not-exists --connection Dummy
+    
+    - name: Sleep for 120 seconds. Allow Service to Start and Create Endpoint
+      run: sleep 120s
+      shell: bash
+    
+    - name :  Get service details 
+      env:
+        SNOWFLAKE_CONNECTIONS_DUMMY_ACCOUNT: ${{secrets.spc_account}}
+        SNOWFLAKE_CONNECTIONS_DUMMY_USER: ${{secrets.spc_USER}}
+        SNOWFLAKE_CONNECTIONS_DUMMY_PASSWORD: ${{secrets.spc_PASSWORD}}
+        SNOWFLAKE_CONNECTIONS_DUMMY_ROLE: accountadmin
+        SNOWFLAKE_CONNECTIONS_DUMMY_WAREHOUSE: Compute_wh_v1
+        SNOWFLAKE_CONNECTIONS_DUMMY_DATABASE: doc_ai_db
+        SNOWFLAKE_CONNECTIONS_DUMMY_SCHEMA: doc_ai_schema
+      run : |
+        snow spcs service status dbt_service --connection Dummy
+
+    
